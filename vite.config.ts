@@ -8,7 +8,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "${path.resolve(__dirname, 'src/styles/global.scss')}";`,
+        additionalData: `@use "${path.resolve(__dirname, 'src/styles/global.scss')}";@use "${path.resolve(__dirname, 'src/styles/variables.scss')}" as *;`,
       },
     },
   },
@@ -19,5 +19,8 @@ export default defineConfig({
       '@components': path.resolve(__dirname, './src/components'),
       '@styles': path.resolve(__dirname, './src/styles'),
     },
+  },
+  server: {
+    port: 3000,
   },
 });
