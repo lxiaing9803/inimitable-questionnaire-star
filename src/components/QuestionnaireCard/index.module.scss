@@ -1,0 +1,29 @@
+.container {
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  /* 初始状态 */
+  transform: translateY(10px);
+  opacity: 0.9;
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .star {
+      color: #f9db11;
+    }
+  }
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+  &:hover {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+}

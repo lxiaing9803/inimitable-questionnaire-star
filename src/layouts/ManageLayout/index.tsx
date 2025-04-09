@@ -51,9 +51,8 @@ const ManageLayout = () => {
         <Space direction="vertical">
           {ButtonGroupData.map((item) => {
             return (
-              <>
+              <div key={item.key}>
                 <Button
-                  key={item.key}
                   size="large"
                   icon={item.icon}
                   type={renderButtonType(item.key)}
@@ -62,7 +61,7 @@ const ManageLayout = () => {
                   {item.name}
                 </Button>
                 {isCreate(item.key) && <Divider />}
-              </>
+              </div>
             );
           })}
         </Space>

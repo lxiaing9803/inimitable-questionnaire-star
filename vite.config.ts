@@ -8,7 +8,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "${path.resolve(__dirname, 'src/styles/global.scss')}";@use "${path.resolve(__dirname, 'src/styles/variables.scss')}" as *;`,
+        additionalData: `@use "${path.resolve(__dirname, 'src/styles/index.scss')}";@use "${path.resolve(__dirname, 'src/styles/variables.scss')}" as *;`,
       },
     },
   },
