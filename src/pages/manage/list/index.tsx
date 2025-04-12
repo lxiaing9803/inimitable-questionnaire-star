@@ -1,46 +1,25 @@
-import { Input, Typography } from 'antd';
+import { Typography } from 'antd';
 import styles from '../manage.module.scss';
 import QuestionnaireCard from '@/components/QuestionnaireCard';
-import { QuestionnaireDataType } from '@/types/manage';
+import { QuestionnaireDataType } from '@/types/question';
+import SearchInput from '@/components/SearchInput';
+import { useCallback, useEffect, useState } from 'react';
+import { getQuestionList } from '@/apis/question';
 
 const { Title } = Typography;
 
-const DEFAULT_DATA: QuestionnaireDataType[] = [
-  {
-    _id: '1',
-    title: '问卷1',
-    isStar: true,
-    isPublished: true,
-    answerCount: 10,
-    createdAt: '2025年04月01日 20:00:00',
-  },
-  {
-    _id: '2',
-    title: '问卷2',
-    isStar: false,
-    isPublished: false,
-    answerCount: 20,
-    createdAt: '2025年04月01日 20:00:00',
-  },
-  {
-    _id: '3',
-    title: '问卷3',
-    isStar: true,
-    isPublished: true,
-    answerCount: 30,
-    createdAt: '2025年04月01日 20:00:00',
-  },
-  {
-    _id: '4',
-    title: '问卷4',
-    isStar: false,
-    isPublished: false,
-    answerCount: 40,
-    createdAt: '2025年04月01日 20:00:00',
-  },
-];
-
 const List = () => {
+  const [list, setList] = useState<QuestionnaireDataType[]>([]);
+
+  const getData = useCallback(async () => {
+    const res = await getQuestionList();
+    setList(res.list);
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
+
   return (
     <>
       <div className={styles.header}>
@@ -48,11 +27,11 @@ const List = () => {
           <Title level={3}>我的问卷</Title>
         </div>
         <div className={styles.right}>
-          <Input placeholder="请输入问卷名称" />
+          <SearchInput />
         </div>
       </div>
       <div className={styles.content}>
-        {DEFAULT_DATA.map((item) => {
+        {list?.map((item) => {
           return <QuestionnaireCard key={item._id} info={item} />;
         })}
       </div>

@@ -1,5 +1,5 @@
 import { Button, Divider, message, Modal, Space, Tag } from 'antd';
-import { QuestionnaireDataType } from '@/types/manage';
+import { QuestionnaireDataType } from '@/types/question';
 import styles from './index.module.scss';
 import { useCallback, useMemo } from 'react';
 import {
@@ -18,7 +18,7 @@ type QuestionnaireCardProps = {
   info: QuestionnaireDataType;
 };
 
-type NavigateType = 'edit' | 'stat';
+type NavigateType = 'operation' | 'stat';
 
 const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
   const { _id, title, createdAt, answerCount, isPublished, isStar } = info;
@@ -30,7 +30,7 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
   }, [isStar]);
 
   const currentLinkTo = useMemo(() => {
-    return isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`;
+    return isPublished ? `/question/stat/${_id}` : `/question/operation/${_id}`;
   }, [_id, isPublished]);
 
   const handleNavigate = useCallback(
@@ -86,7 +86,7 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
               type="text"
               size="small"
               icon={<EditOutlined />}
-              onClick={() => handleNavigate('edit')}
+              onClick={() => handleNavigate('operation')}
             >
               编辑问卷
             </Button>

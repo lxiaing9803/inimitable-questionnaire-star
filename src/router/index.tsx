@@ -9,7 +9,7 @@ import NotFound from '@/pages/not-found';
 import List from '@/pages/manage/list';
 import Trash from '@/pages/manage/trash';
 import Star from '@/pages/manage/star';
-import Edit from '@/pages/question/edit';
+import Operation from '@/pages/question/Operation';
 import Stat from '@/pages/question/stat';
 
 const router = createBrowserRouter([
@@ -58,8 +58,8 @@ const router = createBrowserRouter([
     element: <QuestionLayout />,
     children: [
       {
-        path: 'edit/:id',
-        element: <Edit />,
+        path: 'operation/:id',
+        element: <Operation />,
       },
       {
         path: 'stat/:id',

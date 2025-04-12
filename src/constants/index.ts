@@ -16,6 +16,6 @@ export const PAGE_TITLE_MAP = {
   '/manage/list': '问卷系统-我的问卷',
   '/manage/star': '问卷系统-星标问卷',
   '/manage/trash': '问卷系统-回收站',
-  '/question/edit': '问卷系统-编辑问卷',
+  '/question/operation': '问卷系统-编辑问卷',
   '/question/stat': '问卷系统-问卷统计',
 };

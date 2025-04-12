@@ -5,6 +5,10 @@
   .right {
     flex: 1;
   }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .content {
   margin: 20px 0;
