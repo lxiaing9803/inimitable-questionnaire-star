@@ -2,13 +2,14 @@ import { Empty, Typography } from 'antd';
 import styles from '../manage.module.scss';
 import QuestionnaireCard from '@/components/QuestionnaireCard';
 import SearchInput from '@/components/SearchInput';
-import useLoadQuestionList from '@/hooks/useLoadQuetionList';
+import useLoadQuestionList from '@/hooks/useLoadQuestionList';
 import LoadingSpin from '@/components/LoadingSpin';
+import ListPagination from '@/components/ListPagination';
 
 const { Title } = Typography;
 
 const Star = () => {
-  const { data, loading } = useLoadQuestionList({ isStar: true });
+  const { list, total, loading } = useLoadQuestionList({ isStar: true });
 
   return (
     <>
@@ -23,17 +24,17 @@ const Star = () => {
       <div className={styles.content}>
         {loading ? (
           <LoadingSpin />
-        ) : data?.list.length === 0 ? (
+        ) : list.length === 0 ? (
           <Empty description="暂无数据" />
         ) : (
           <>
-            {data?.list.map((item) => {
+            {list.map((item) => {
               return <QuestionnaireCard key={item._id} info={item} />;
             })}
           </>
         )}
       </div>
-      <div className={styles.footer}>分页</div>
+      {list.length > 0 && !loading && <ListPagination total={total} />}
     </>
   );
 };

@@ -19,3 +19,8 @@ export const PAGE_TITLE_MAP = {
   '/question/operation': '问卷系统-编辑问卷',
   '/question/stat': '问卷系统-问卷统计',
 };
+
+/** 常用默认参数 */
+
+/** 默认数据条数 */
+export const DEFAULT_PAGE_SIZE = 10;

@@ -1,6 +1,6 @@
 import { getQuestionDetail } from '@/apis/question';
+import { useRequest } from 'ahooks';
 import { useParams } from 'react-router-dom';
-import useRequest from './useRequest';
 
 const useLoadQuestionDetail = () => {
   const { id = '' } = useParams();

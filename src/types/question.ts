@@ -16,4 +16,7 @@ export type QuestionnaireRequestParams = {
   title: string;
   isStar: boolean;
   isDeleted: boolean;
+  page: number;
+  pageSize: number;
+  keyword: string;
 };

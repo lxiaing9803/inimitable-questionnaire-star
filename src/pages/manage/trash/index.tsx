@@ -15,14 +15,14 @@ import { QuestionnaireDataType } from '@/types/question';
 import { useCallback, useMemo, useState } from 'react';
 import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
 import SearchInput from '@/components/SearchInput';
-import useLoadQuestionList from '@/hooks/useLoadQuetionList';
+import useLoadQuestionList from '@/hooks/useLoadQuestionList';
 
 const { Title } = Typography;
 
 const Trash = () => {
   const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
 
-  const { data, loading } = useLoadQuestionList({ isDeleted: true });
+  const { list, loading } = useLoadQuestionList({ isDeleted: true });
 
   const rowSelection: TableProps<QuestionnaireDataType>['rowSelection'] = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: QuestionnaireDataType[]) => {
@@ -108,7 +108,7 @@ const Trash = () => {
           loading={loading}
           rowKey={(row) => row._id}
           columns={columns}
-          dataSource={data?.list || []}
+          dataSource={list}
           pagination={false}
           rowSelection={rowSelection}
         />
