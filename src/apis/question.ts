@@ -15,3 +15,15 @@ export async function getQuestionList(params?: Partial<QuestionnaireRequestParam
     params,
   });
 }
+
+export async function updateQuestion(id: string, data: Partial<QuestionnaireRequestParams>) {
+  return await request.put<any>(`/api/question/update/${id}`, data);
+}
+
+export async function duplicateQuestion(id: string) {
+  return await request.post<{ id: string }>(`/api/question/duplicate/${id}`);
+}
+
+export async function deleteQuestions(ids: string[]) {
+  return await request.delete<any>('/api/question/delete', { data: ids });
+}

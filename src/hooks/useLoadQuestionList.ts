@@ -8,7 +8,7 @@ const useLoadQuestionList = (params: Partial<QuestionnaireRequestParams> = {}) =
 
   const [searchParams] = useSearchParams();
 
-  const { loading, data, run } = useRequest(
+  const { loading, data, run, refresh } = useRequest(
     async () => {
       const keyword = searchParams.get('keyword') || '';
       const pageSize = parseInt(searchParams.get('pageSize') || '10');
@@ -25,6 +25,7 @@ const useLoadQuestionList = (params: Partial<QuestionnaireRequestParams> = {}) =
     list: data?.list || [],
     total: data?.total || 0,
     run,
+    refresh,
   };
 };
 

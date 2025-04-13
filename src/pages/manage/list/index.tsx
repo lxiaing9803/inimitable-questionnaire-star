@@ -42,7 +42,6 @@ const List = () => {
       if (top < window.innerHeight) {
         run();
         setIsStart(true);
-        // console.log(1);
       }
     },
     { wait: 1000 }
@@ -82,7 +81,7 @@ const List = () => {
       </div>
       <div className={styles.content}>
         {list?.map((item) => {
-          return <QuestionnaireCard key={item._id} info={item} />;
+          return <QuestionnaireCard key={item.id} info={item} />;
         })}
       </div>
       <div className={styles.footer}>

@@ -1,7 +1,7 @@
 import { Button, Divider, message, Modal, Space, Tag } from 'antd';
 import { QuestionnaireDataType } from '@/types/question';
 import styles from './index.module.scss';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   CopyOutlined,
   DeleteOutlined,
@@ -13,6 +13,8 @@ import {
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
+import { useRequest } from 'ahooks';
+import { duplicateQuestion, updateQuestion } from '@/apis/question';
 
 type QuestionnaireCardProps = {
   info: QuestionnaireDataType;
@@ -21,23 +23,64 @@ type QuestionnaireCardProps = {
 type NavigateType = 'operation' | 'stat';
 
 const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
-  const { _id, title, createdAt, answerCount, isPublished, isStar } = info;
+  const { id, title, createdAt, answerCount, isPublished, isStar, isDeleted } = info;
 
   const navigate = useNavigate();
 
+  const [isStarState, setIsStartState] = useState<boolean>(isStar);
+  const [isDeletedState, setIsDeletedState] = useState<boolean>(isDeleted);
+
+  const { run: changeStar, loading: changeStarLoading } = useRequest(
+    async () => {
+      await updateQuestion(id, { isStar: isStarState });
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        setIsStartState(!isStarState);
+        message.success('操作成功');
+      },
+    }
+  );
+
+  const { run: duplicateRun, loading: duplicateLoading } = useRequest(
+    async () => {
+      const res = await duplicateQuestion(id);
+      return res;
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        message.success('复制成功');
+        navigate(`/question/operation/${res.id}`);
+      },
+    }
+  );
+
+  const { run: deleteRun, loading: deleteLoading } = useRequest(
+    async () => await updateQuestion(id, { isDeleted: !isDeletedState }),
+    {
+      manual: true,
+      onSuccess: () => {
+        setIsDeletedState(!isDeletedState);
+        message.success('删除成功');
+      },
+    }
+  );
+
   const renderStarStatus = useMemo(() => {
-    return isStar ? '取消标星' : '标星';
-  }, [isStar]);
+    return isStarState ? '取消标星' : '标星';
+  }, [isStarState]);
 
   const currentLinkTo = useMemo(() => {
-    return isPublished ? `/question/stat/${_id}` : `/question/operation/${_id}`;
-  }, [_id, isPublished]);
+    return isPublished ? `/question/stat/${id}` : `/question/operation/${id}`;
+  }, [id, isPublished]);
 
   const handleNavigate = useCallback(
     (key: NavigateType) => {
-      navigate(`/question/${key}/${_id}`);
+      navigate(`/question/${key}/${id}`);
     },
-    [_id, navigate]
+    [id, navigate]
   );
 
   const handleDelete = useCallback(() => {
@@ -49,15 +92,12 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
       cancelText: '取消',
       centered: true,
       onOk: () => {
-        console.log(_id);
-        message.success('删除成功');
+        deleteRun();
       },
     });
-  }, [_id]);
+  }, [deleteRun]);
 
-  const handleCopy = useCallback(() => {
-    message.success('复制成功');
-  }, []);
+  if (isDeletedState) return null;
 
   return (
     <div className={styles.container}>
@@ -65,7 +105,7 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
         <div className={styles.left}>
           <Link to={currentLinkTo}>
             <Space>
-              {isStar && <StarFilled className={styles.star} />}
+              {isStarState && <StarFilled className={styles.star} />}
               {title}
             </Space>
           </Link>
@@ -103,10 +143,22 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
         </div>
         <div className={styles.right}>
           <Space>
-            <Button type="text" size="small" icon={<StarOutlined />}>
+            <Button
+              type="text"
+              size="small"
+              icon={<StarOutlined />}
+              onClick={changeStar}
+              loading={changeStarLoading}
+            >
               {renderStarStatus}
             </Button>
-            <Button type="text" size="small" icon={<CopyOutlined />} onClick={handleCopy}>
+            <Button
+              type="text"
+              size="small"
+              icon={<CopyOutlined />}
+              onClick={duplicateRun}
+              loading={duplicateLoading}
+            >
               复制
             </Button>
             <Button
@@ -115,6 +167,7 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
               size="small"
               icon={<DeleteOutlined />}
               onClick={handleDelete}
+              loading={deleteLoading}
             >
               删除
             </Button>

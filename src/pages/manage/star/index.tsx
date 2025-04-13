@@ -29,7 +29,7 @@ const Star = () => {
         ) : (
           <>
             {list.map((item) => {
-              return <QuestionnaireCard key={item._id} info={item} />;
+              return <QuestionnaireCard key={item.id} info={item} />;
             })}
           </>
         )}

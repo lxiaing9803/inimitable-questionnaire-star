@@ -16,13 +16,48 @@ import { useCallback, useMemo, useState } from 'react';
 import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
 import SearchInput from '@/components/SearchInput';
 import useLoadQuestionList from '@/hooks/useLoadQuestionList';
+import { useRequest } from 'ahooks';
+import { deleteQuestions, updateQuestion } from '@/apis/question';
 
 const { Title } = Typography;
 
 const Trash = () => {
   const [selectedIds, setSelectedIds] = useState<React.Key[]>([]);
 
-  const { list, loading } = useLoadQuestionList({ isDeleted: true });
+  const { list, total, loading, refresh } = useLoadQuestionList({ isDeleted: true });
+
+  const onRefresh = useCallback(() => {
+    refresh();
+    setSelectedIds([]);
+  }, [refresh]);
+
+  const { loading: recoveryLoading, run: recoveryRun } = useRequest(
+    async () => {
+      for await (const id of selectedIds) {
+        await updateQuestion(id as string, { isDeleted: false });
+      }
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success('恢复成功');
+        onRefresh();
+      },
+    }
+  );
+
+  const { loading: deleteLoading, run: deleteRun } = useRequest(
+    async () => {
+      await deleteQuestions(selectedIds as string[]);
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success('删除成功');
+        onRefresh();
+      },
+    }
+  );
 
   const rowSelection: TableProps<QuestionnaireDataType>['rowSelection'] = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: QuestionnaireDataType[]) => {
@@ -31,16 +66,16 @@ const Trash = () => {
     },
   };
 
-  console.log('selectedIds:', selectedIds);
-
   const columns: TableColumnsType<QuestionnaireDataType> = useMemo(() => {
     return [
       {
         dataIndex: 'title',
+        align: 'center',
         title: '问卷名称',
       },
       {
         dataIndex: 'isPublished',
+        align: 'center',
         title: '是否发布',
         render: (val) => {
           return <Tag color={renderPublishTagColor(val)}>{renderPublishStatus(val)}</Tag>;
@@ -48,10 +83,12 @@ const Trash = () => {
       },
       {
         dataIndex: 'answerCount',
+        align: 'center',
         title: '答卷数量',
       },
       {
         dataIndex: 'createdAt',
+        align: 'center',
         title: '创建时间',
       },
     ];
@@ -65,10 +102,10 @@ const Trash = () => {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        message.success('恢复成功');
+        recoveryRun();
       },
     });
-  }, []);
+  }, [recoveryRun]);
 
   const handleDelete = useCallback(() => {
     Modal.confirm({
@@ -78,10 +115,10 @@ const Trash = () => {
       okText: '确定',
       cancelText: '取消',
       onOk() {
-        message.success('删除成功');
+        deleteRun();
       },
     });
-  }, []);
+  }, [deleteRun]);
   return (
     <>
       <div className={styles.header}>
@@ -95,10 +132,21 @@ const Trash = () => {
       <div className={styles.content}>
         <Flex justify="flex-end" style={{ marginBottom: 20 }}>
           <Space>
-            <Button type="primary" disabled={!selectedIds.length} onClick={handleRecovery}>
+            <Button
+              type="primary"
+              disabled={!selectedIds.length}
+              onClick={handleRecovery}
+              loading={recoveryLoading}
+            >
               恢复
             </Button>
-            <Button danger type="primary" disabled={!selectedIds.length} onClick={handleDelete}>
+            <Button
+              danger
+              type="primary"
+              disabled={!selectedIds.length}
+              onClick={handleDelete}
+              loading={deleteLoading}
+            >
               彻底删除
             </Button>
           </Space>
@@ -106,14 +154,16 @@ const Trash = () => {
         <Table
           bordered
           loading={loading}
-          rowKey={(row) => row._id}
+          rowKey={(row) => row.id}
           columns={columns}
           dataSource={list}
-          pagination={false}
+          pagination={{
+            total,
+            defaultPageSize: 10,
+          }}
           rowSelection={rowSelection}
         />
       </div>
-      <div className={styles.footer}>分页</div>
     </>
   );
 };
