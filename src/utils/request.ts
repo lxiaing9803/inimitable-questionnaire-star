@@ -6,11 +6,12 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { getToken } from './user';
 
 // 创建 axios 实例
 const instance: AxiosInstance = axios.create({
-  // baseURL: process.env.REACT_APP_API_BASE_URL, // 从环境变量获取基础URL
-  timeout: 10000, // 请求超时时间
+  // baseURL: process.env.REACT_APP_API_BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -19,15 +20,13 @@ const instance: AxiosInstance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // 在发送请求之前做些什么，例如添加 token
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
-    // 对请求错误做些什么
     return Promise.reject(error);
   }
 );

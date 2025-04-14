@@ -24,3 +24,6 @@ export const PAGE_TITLE_MAP = {
 
 /** 默认数据条数 */
 export const DEFAULT_PAGE_SIZE = 10;
+
+/** token */
+export const TOKEN_KEY = 'QUESTION_USER_TOKEN';

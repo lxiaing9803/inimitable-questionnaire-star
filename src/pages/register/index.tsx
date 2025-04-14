@@ -1,20 +1,35 @@
-import { Button, Flex, Form, Input, Space, Typography } from 'antd';
+import { Button, Flex, Form, Input, message, Space, Typography } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
 import { useCallback } from 'react';
 import { RegisterFormDataType, VALIDATOR_FORM_ITEM_ENUM } from '@/types/user';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LOGIN_PATHNAME } from '@/constants';
 import styles from './index.module.scss';
 import { regexErrorMap, usernameRegex } from '@/constants/rules';
+import { register } from '@/apis/user';
 
 const { Title } = Typography;
 
 const Register = () => {
   const [form] = Form.useForm();
 
-  const onFinish = useCallback((values: RegisterFormDataType) => {
-    console.log(values);
-  }, []);
+  const navigate = useNavigate();
+
+  const onFinish = useCallback(
+    async (values: RegisterFormDataType) => {
+      const { username, password, nickname } = values;
+      await register({ username, password, nickname }).then(() => {
+        message.success({
+          content: '注册成功',
+          duration: 1,
+          onClose: () => {
+            navigate(LOGIN_PATHNAME);
+          },
+        });
+      });
+    },
+    [navigate]
+  );
 
   return (
     <div className={styles.register}>
