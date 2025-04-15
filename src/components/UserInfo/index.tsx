@@ -1,19 +1,22 @@
 import { LOGIN_PATHNAME } from '@/constants';
-import { UserInfoType } from '@/types/user';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, message, Modal, Space } from 'antd';
-import { useRequest } from 'ahooks';
-import { getUserInfo } from '@/apis/user';
 import { removeToken } from '@/utils/user';
+import useGetUserInfo from '@/hooks/useGetUserInfo';
+import { useAppDispatch } from '@/utils/hook';
+import { logoutReducer } from '@/store/userReducer';
+import { useCallback } from 'react';
 
-const UserComponent = (props: UserInfoType) => {
-  const { nickname } = props;
-
+const UserInfo = () => {
   const navigate = useNavigate();
 
-  const logout = () => {
+  const { nickname } = useGetUserInfo();
+
+  const dispatch = useAppDispatch();
+
+  const logout = useCallback(() => {
     Modal.confirm({
       title: '退出登录',
       content: '确定要退出登录吗？',
@@ -25,29 +28,28 @@ const UserComponent = (props: UserInfoType) => {
           onClose: () => {
             removeToken();
             navigate(LOGIN_PATHNAME);
+            dispatch(logoutReducer());
           },
         });
       },
     });
-  };
+  }, [dispatch, navigate]);
 
   return (
-    <Space>
-      <span className={styles.nickname}>
-        <UserOutlined /> {nickname}
-      </span>
-      <Button type="link" onClick={logout}>
-        退出
-      </Button>
-    </Space>
-  );
-};
-
-const UserInfo = () => {
-  const { data } = useRequest(getUserInfo);
-
-  return (
-    <>{data?.username ? <UserComponent {...data} /> : <Link to={LOGIN_PATHNAME}>登录</Link>}</>
+    <>
+      {nickname ? (
+        <Space>
+          <span className={styles.nickname}>
+            <UserOutlined /> {nickname}
+          </span>
+          <Button type="link" onClick={logout}>
+            退出
+          </Button>
+        </Space>
+      ) : (
+        <Link to={LOGIN_PATHNAME}>登录</Link>
+      )}
+    </>
   );
 };
 

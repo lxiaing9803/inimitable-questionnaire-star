@@ -10,11 +10,10 @@ export interface BasicUserInfoType {
 }
 
 export interface UserInfoType extends BasicUserInfoType {
-  phone: string;
-  avatar: string;
-  token: string;
-  userId: string;
   nickname: string;
+  phone?: string;
+  avatar?: string;
+  email?: string;
 }
 
 export interface RegisterParamsType extends BasicUserInfoType {

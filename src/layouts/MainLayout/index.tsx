@@ -1,4 +1,4 @@
-import { Layout } from 'antd';
+import { Flex, Layout, Spin } from 'antd';
 import { Outlet, useLocation } from 'react-router-dom';
 import styles from './index.module.scss';
 import Logo from '@/components/Logo';
@@ -6,11 +6,17 @@ import UserInfo from '@/components/UserInfo';
 import { PAGE_TITLE_MAP } from '@/constants';
 import { useMemo, useEffect } from 'react';
 import { PageTitleKeyType } from '@/types';
+import useLoadUserData from '@/hooks/useLoadUserData';
+import useNavPage from '@/hooks/useNavPage';
 
 const { Header, Content, Footer } = Layout;
 
 const MainLayout = () => {
   const { pathname } = useLocation();
+
+  const { isWaitingUserInfo } = useLoadUserData();
+
+  useNavPage(isWaitingUserInfo);
 
   const title = useMemo(() => {
     return PAGE_TITLE_MAP[pathname as PageTitleKeyType] || '问卷系统';
@@ -30,7 +36,13 @@ const MainLayout = () => {
         </div>
       </Header>
       <Content className={styles.main}>
-        <Outlet />
+        {!isWaitingUserInfo ? (
+          <Outlet />
+        ) : (
+          <Flex justify="center">
+            <Spin />
+          </Flex>
+        )}
       </Content>
       <Footer className={styles.footer}>问卷系统 ©2025 - present. Created by AshinLX</Footer>
     </Layout>

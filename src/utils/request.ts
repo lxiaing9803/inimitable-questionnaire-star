@@ -21,9 +21,10 @@ const instance: AxiosInstance = axios.create({
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (!token) {
+      message.error('请先登录');
     }
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {

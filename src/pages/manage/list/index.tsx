@@ -38,8 +38,8 @@ const List = () => {
     () => {
       const ele = moreRef.current;
       if (!ele) return;
-      const { top } = ele.getBoundingClientRect();
-      if (top < window.innerHeight) {
+      const { bottom } = ele.getBoundingClientRect();
+      if (bottom < document.body.clientHeight) {
         run();
         setIsStart(true);
       }
