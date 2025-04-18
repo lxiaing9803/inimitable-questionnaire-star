@@ -5,8 +5,8 @@ export enum VALIDATOR_FORM_ITEM_ENUM {
   phone = 'phone',
 }
 export interface BasicUserInfoType {
-  [VALIDATOR_FORM_ITEM_ENUM.username]: string;
-  [VALIDATOR_FORM_ITEM_ENUM.password]: string;
+  username: string;
+  password: string;
 }
 
 export interface UserInfoType extends BasicUserInfoType {

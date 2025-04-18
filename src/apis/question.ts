@@ -1,9 +1,9 @@
 import { QuestionnaireDataType, QuestionnaireRequestParams } from '@/types/question';
-import { QuestionDataType } from '@/types/question';
+import { QuestionInfoType } from '@/types/question';
 import { request } from '@/utils/request';
 
 export async function getQuestionDetail(id: string) {
-  return await request.get<QuestionDataType>(`/api/question/detail/${id}`);
+  return await request.get<QuestionInfoType>(`/api/question/detail/${id}`);
 }
 
 export async function createQuestion() {
