@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/utils/hook';
 import { changeSelectedId } from '@/store/questionComponentsReducer';
 import cn from 'classnames';
 import styles from './index.module.scss';
+import useBindCanvasKeyPress from '@/hooks/useBindCanvasKeyPress';
 
 interface OperationCanvasProps {
   loading: boolean;
@@ -24,6 +25,8 @@ const genComponent = (componentInfo: QuestionComponentItemDataType) => {
 
 const OperationCanvas: React.FC<OperationCanvasProps> = ({ loading }) => {
   const { componentList, selectedId } = useGetQuestionComponentInfo();
+
+  useBindCanvasKeyPress();
 
   const dispatch = useAppDispatch();
 

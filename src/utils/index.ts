@@ -48,3 +48,9 @@ export const insertNewComponent = (
   }
   draft.selectedId = newComponent.fe_id;
 };
+/** 判断快捷键事件时是否合法 */
+export const isActiveElementValid = () => {
+  const activeElement = document.activeElement;
+  // 如果在body上，则认为没有焦点元素
+  return activeElement === document.body;
+};

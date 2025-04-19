@@ -46,7 +46,6 @@ const ToolBar = () => {
           break;
         case 'paste':
           dispatch(pasteCopiedComponent());
-          message.success('粘贴成功');
           break;
         default:
           break;

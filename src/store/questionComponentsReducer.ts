@@ -94,6 +94,18 @@ export const questionComponentsSlice = createSlice({
       copiedComponent.fe_id = nanoid();
       insertNewComponent(draft, copiedComponent);
     }),
+    selectPrevComponent: produce((draft: QuestionComponentStateType) => {
+      const { selectedId, componentList } = draft;
+      const index = componentList.findIndex((item) => item.fe_id === selectedId);
+      if (index <= 0) return; // 没有选中任何组件
+      draft.selectedId = componentList[index - 1].fe_id;
+    }),
+    selectNextComponent: produce((draft: QuestionComponentStateType) => {
+      const { selectedId, componentList } = draft;
+      const index = componentList.findIndex((item) => item.fe_id === selectedId);
+      if (index === -1 || index >= componentList.length - 1) return; // 没有选中任何组件
+      draft.selectedId = componentList[index + 1].fe_id;
+    }),
   },
 });
 
@@ -107,6 +119,8 @@ export const {
   toggleComponentLocked,
   copySelectedComponent,
   pasteCopiedComponent,
+  selectPrevComponent,
+  selectNextComponent,
 } = questionComponentsSlice.actions;
 
 export default questionComponentsSlice.reducer;
