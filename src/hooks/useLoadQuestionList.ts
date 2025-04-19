@@ -1,9 +1,9 @@
 import { getQuestionList } from '@/apis/question';
 import { useRequest } from 'ahooks';
-import { QuestionnaireRequestParams } from '@/types/question';
+import { QuestionRequestParams } from '@/types/question';
 import { useSearchParams } from 'react-router-dom';
 
-const useLoadQuestionList = (params: Partial<QuestionnaireRequestParams> = {}) => {
+const useLoadQuestionList = (params: Partial<QuestionRequestParams> = {}) => {
   const { isDeleted, isStar } = params;
 
   const [searchParams] = useSearchParams();

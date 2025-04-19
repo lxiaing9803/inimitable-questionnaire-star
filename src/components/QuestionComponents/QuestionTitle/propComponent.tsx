@@ -3,7 +3,13 @@ import { QuestionTitlePropsType } from './type';
 import { useCallback, useEffect } from 'react';
 import { LevelList } from './constant';
 
-const PropComponent: React.FC<QuestionTitlePropsType> = ({ text, level, isCenter, onChange }) => {
+const PropComponent: React.FC<QuestionTitlePropsType> = ({
+  text,
+  level,
+  isCenter,
+  disabled,
+  onChange,
+}) => {
   const [form] = Form.useForm();
 
   const handleValuesChange = useCallback(() => {
@@ -19,6 +25,7 @@ const PropComponent: React.FC<QuestionTitlePropsType> = ({ text, level, isCenter
       layout="vertical"
       initialValues={{ text, level, isCenter }}
       form={form}
+      disabled={disabled}
       onValuesChange={handleValuesChange}
     >
       <Form.Item label="标题内容" name="text" rules={[{ required: true, message: '请输入标题' }]}>

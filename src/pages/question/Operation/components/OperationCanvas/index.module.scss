@@ -16,6 +16,11 @@
       }
     }
 
+    &.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     &:hover {
       border-color: #d9d9d9;
     }

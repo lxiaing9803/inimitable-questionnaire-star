@@ -1,6 +1,6 @@
 import { Empty, Spin, Typography } from 'antd';
-import QuestionnaireCard from '@/components/QuestionnaireCard';
-import { QuestionnaireDataType } from '@/types/question';
+import QuestionCard from '@/components/QuestionCard';
+import { QuestionDataType } from '@/types/question';
 import SearchInput from '@/components/SearchInput';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getQuestionList } from '@/apis/question';
@@ -11,7 +11,7 @@ import { DEFAULT_PAGE_SIZE } from '@/constants';
 const { Title } = Typography;
 
 const List = () => {
-  const [list, setList] = useState<QuestionnaireDataType[]>([]);
+  const [list, setList] = useState<QuestionDataType[]>([]);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const [isStart, setIsStart] = useState<boolean>(false);
@@ -81,7 +81,7 @@ const List = () => {
       </div>
       <div className={styles.content}>
         {list?.map((item) => {
-          return <QuestionnaireCard key={item.id} info={item} />;
+          return <QuestionCard key={item.id} info={item} />;
         })}
       </div>
       <div className={styles.footer}>

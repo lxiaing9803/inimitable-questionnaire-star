@@ -1,5 +1,5 @@
 import { Button, Divider, message, Modal, Space, Tag } from 'antd';
-import { QuestionnaireDataType } from '@/types/question';
+import { QuestionDataType } from '@/types/question';
 import styles from './index.module.scss';
 import { useCallback, useMemo, useState } from 'react';
 import {
@@ -16,13 +16,13 @@ import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
 import { useRequest } from 'ahooks';
 import { duplicateQuestion, updateQuestion } from '@/apis/question';
 
-type QuestionnaireCardProps = {
-  info: QuestionnaireDataType;
+type QuestionCardProps = {
+  info: QuestionDataType;
 };
 
 type NavigateType = 'operation' | 'stat';
 
-const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
+const QuestionCard: React.FC<QuestionCardProps> = ({ info }) => {
   const { id, title, createdAt, answerCount, isPublished, isStar, isDeleted } = info;
 
   const navigate = useNavigate();
@@ -178,4 +178,4 @@ const QuestionnaireCard: React.FC<QuestionnaireCardProps> = ({ info }) => {
   );
 };
 
-export default QuestionnaireCard;
+export default QuestionCard;

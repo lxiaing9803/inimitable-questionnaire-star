@@ -2,7 +2,12 @@ import { Form, Input } from 'antd';
 import { QuestionInputPropsType } from './type';
 import { useCallback, useEffect } from 'react';
 
-const PropComponent: React.FC<QuestionInputPropsType> = ({ title, placeholder, onChange }) => {
+const PropComponent: React.FC<QuestionInputPropsType> = ({
+  title,
+  placeholder,
+  disabled,
+  onChange,
+}) => {
   const [form] = Form.useForm();
 
   const handleValuesChange = useCallback(() => {
@@ -18,6 +23,7 @@ const PropComponent: React.FC<QuestionInputPropsType> = ({ title, placeholder, o
       layout="vertical"
       initialValues={{ title, placeholder }}
       form={form}
+      disabled={disabled}
       onValuesChange={handleValuesChange}
     >
       <Form.Item label="标题" name="title" rules={[{ required: true, message: '请输入标题' }]}>

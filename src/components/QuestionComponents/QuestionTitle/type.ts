@@ -13,6 +13,7 @@ export type QuestionTitlePropsType = {
   text?: string;
   level?: LevelType;
   isCenter?: boolean;
+  disabled?: boolean;
   onChange?: (newProps: QuestionTitlePropsType) => void;
 };
 

@@ -2,6 +2,7 @@ import { Button, Space, Typography } from 'antd';
 import styles from './index.module.scss';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import ToolBar from '../ToolBar';
 
 const { Title } = Typography;
 
@@ -20,7 +21,7 @@ const ToolHeader = () => {
           </Space>
         </div>
         <div className={styles.main}>
-          <div className={styles.title}>标题</div>
+          <ToolBar />
         </div>
         <div className={styles.right}>
           <Space>

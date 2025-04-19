@@ -45,18 +45,24 @@ const OperationCanvas: React.FC<OperationCanvasProps> = ({ loading }) => {
 
   return (
     <div className={styles.canvas}>
-      {componentList.map((item) => {
-        const { fe_id } = item;
-        return (
-          <div
-            key={fe_id}
-            className={cn(styles.componentWrapper, { [styles.selected]: selectedId === fe_id })}
-            onClick={(e) => handleClick(e, fe_id)}
-          >
-            <div className={styles.component}>{genComponent(item)}</div>
-          </div>
-        );
-      })}
+      {componentList
+        .filter((c) => !c.isHidden)
+        .map((item) => {
+          const { fe_id } = item;
+          return (
+            <div
+              key={fe_id}
+              className={cn(
+                styles.componentWrapper,
+                { [styles.selected]: selectedId === fe_id },
+                { [styles.locked]: item.isLocked }
+              )}
+              onClick={(e) => handleClick(e, fe_id)}
+            >
+              <div className={styles.component}>{genComponent(item)}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };

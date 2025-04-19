@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import styles from '../manage.module.scss';
-import { QuestionnaireDataType } from '@/types/question';
+import { QuestionDataType } from '@/types/question';
 import { useCallback, useMemo, useState } from 'react';
 import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
 import SearchInput from '@/components/SearchInput';
@@ -59,14 +59,14 @@ const Trash = () => {
     }
   );
 
-  const rowSelection: TableProps<QuestionnaireDataType>['rowSelection'] = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: QuestionnaireDataType[]) => {
+  const rowSelection: TableProps<QuestionDataType>['rowSelection'] = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: QuestionDataType[]) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedIds(selectedRowKeys);
     },
   };
 
-  const columns: TableColumnsType<QuestionnaireDataType> = useMemo(() => {
+  const columns: TableColumnsType<QuestionDataType> = useMemo(() => {
     return [
       {
         dataIndex: 'title',

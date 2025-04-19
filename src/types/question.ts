@@ -8,9 +8,13 @@ export type QuestionComponentItemDataType = {
   type: QuestionComponentType;
   /** 组件的props */
   props: QuestionComponentPropsType;
+  /** 组件的显示/隐藏 */
+  isHidden?: boolean;
+  /** 组件的锁定/解锁 */
+  isLocked?: boolean;
 };
 
-export type QuestionnaireDataType = {
+export type QuestionDataType = {
   id: string;
   title: string;
   isStar: boolean;
@@ -20,7 +24,7 @@ export type QuestionnaireDataType = {
   isDeleted: boolean;
 };
 
-export type QuestionnaireRequestParams = {
+export type QuestionRequestParams = {
   title: string;
   isStar: boolean;
   isDeleted: boolean;
@@ -41,4 +45,6 @@ export type QuestionComponentStateType = {
   componentList: QuestionComponentItemDataType[];
   /** 当前选中的组件id */
   selectedId: string;
+  /** 当前复制的组件 */
+  copiedComponent: QuestionComponentItemDataType | null;
 };

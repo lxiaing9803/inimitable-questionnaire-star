@@ -1,6 +1,6 @@
 import { Empty, Typography } from 'antd';
 import styles from '../manage.module.scss';
-import QuestionnaireCard from '@/components/QuestionnaireCard';
+import QuestionCard from '@/components/QuestionCard';
 import SearchInput from '@/components/SearchInput';
 import useLoadQuestionList from '@/hooks/useLoadQuestionList';
 import LoadingSpin from '@/components/LoadingSpin';
@@ -29,7 +29,7 @@ const Star = () => {
         ) : (
           <>
             {list.map((item) => {
-              return <QuestionnaireCard key={item.id} info={item} />;
+              return <QuestionCard key={item.id} info={item} />;
             })}
           </>
         )}

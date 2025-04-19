@@ -1,4 +1,4 @@
-import { QuestionnaireDataType, QuestionnaireRequestParams } from '@/types/question';
+import { QuestionDataType, QuestionRequestParams } from '@/types/question';
 import { QuestionInfoType } from '@/types/question';
 import { request } from '@/utils/request';
 
@@ -10,13 +10,13 @@ export async function createQuestion() {
   return await request.post<{ id: string }>('/api/question');
 }
 
-export async function getQuestionList(params?: Partial<QuestionnaireRequestParams>) {
-  return await request.get<{ list: QuestionnaireDataType[]; total: number }>('/api/question/list', {
+export async function getQuestionList(params?: Partial<QuestionRequestParams>) {
+  return await request.get<{ list: QuestionDataType[]; total: number }>('/api/question/list', {
     params,
   });
 }
 
-export async function updateQuestion(id: string, data: Partial<QuestionnaireRequestParams>) {
+export async function updateQuestion(id: string, data: Partial<QuestionRequestParams>) {
   return await request.put<any>(`/api/question/update/${id}`, data);
 }
 

@@ -33,7 +33,13 @@ const useLoadQuestionDetail = () => {
     if (!data) return;
     const { componentList } = data;
 
-    dispatch(resetComponentList({ componentList, selectedId: componentList?.[0]?.fe_id ?? '' }));
+    dispatch(
+      resetComponentList({
+        componentList,
+        selectedId: componentList?.[0]?.fe_id ?? '',
+        copiedComponent: null,
+      })
+    );
   }, [data, dispatch]);
 
   return {
