@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userReducer';
 import questionComponentsReducer from './questionComponentsReducer';
+import questionPageSettingReducer from './questionPageSetting';
 
 export const store = configureStore({
   reducer: {
     userReducer,
     questionComponentsReducer,
+    questionPageSettingReducer,
   },
 });
 

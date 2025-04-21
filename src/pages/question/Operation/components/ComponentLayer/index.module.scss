@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e8e8e8;
+  .title {
+    cursor: pointer;
+    &.selected {
+      color: #1890ff;
+    }
+  }
+  .btn {
+    opacity: 0.2;
+  }
+  &:hover {
+    .btn {
+      opacity: 1;
+    }
+  }
+}

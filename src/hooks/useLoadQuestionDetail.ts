@@ -1,5 +1,6 @@
 import { getQuestionDetail } from '@/apis/question';
 import { resetComponentList } from '@/store/questionComponentsReducer';
+import { resetPageSetting } from '@/store/questionPageSetting';
 import { useAppDispatch } from '@/utils/hook';
 import { useRequest } from 'ahooks';
 import { message } from 'antd';
@@ -31,7 +32,7 @@ const useLoadQuestionDetail = () => {
   // 根据获取的data设置questionComponentsReducer
   useEffect(() => {
     if (!data) return;
-    const { componentList } = data;
+    const { title, componentList, desc = '', css = '', js = '' } = data;
 
     dispatch(
       resetComponentList({
@@ -40,6 +41,8 @@ const useLoadQuestionDetail = () => {
         copiedComponent: null,
       })
     );
+
+    dispatch(resetPageSetting({ title, desc, css, js }));
   }, [data, dispatch]);
 
   return {

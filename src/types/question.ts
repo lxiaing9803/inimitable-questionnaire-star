@@ -38,6 +38,9 @@ export type QuestionInfoType = {
   id: string;
   title: string;
   componentList: QuestionComponentItemDataType[];
+  desc?: string;
+  js?: string;
+  css?: string;
 };
 // store中questionComponentsReducer的state类型
 export type QuestionComponentStateType = {
@@ -47,4 +50,20 @@ export type QuestionComponentStateType = {
   selectedId: string;
   /** 当前复制的组件 */
   copiedComponent: QuestionComponentItemDataType | null;
+};
+
+export enum QUESTION_RIGHT_PANEL_TAB_KEYS {
+  PROP_KEY = 'prop',
+  SETTING_KEY = 'setting',
+}
+
+export type QuestionRightPanelTabItemType =
+  | QUESTION_RIGHT_PANEL_TAB_KEYS.PROP_KEY
+  | QUESTION_RIGHT_PANEL_TAB_KEYS.SETTING_KEY;
+
+export type QuestionPageSettingType = {
+  title: string;
+  desc?: string;
+  js?: string;
+  css?: string;
 };

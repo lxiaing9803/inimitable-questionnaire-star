@@ -106,6 +106,19 @@ export const questionComponentsSlice = createSlice({
       if (index === -1 || index >= componentList.length - 1) return; // 没有选中任何组件
       draft.selectedId = componentList[index + 1].fe_id;
     }),
+    // 重命名组件
+    changeComponentTitle: produce(
+      (
+        draft: QuestionComponentStateType,
+        action: PayloadAction<{ fe_id: string; title: string }>
+      ) => {
+        const { fe_id, title } = action.payload;
+        const currentComponent = draft.componentList.find((item) => item.fe_id === fe_id);
+        if (currentComponent) {
+          currentComponent.title = title;
+        }
+      }
+    ),
   },
 });
 
@@ -121,6 +134,7 @@ export const {
   pasteCopiedComponent,
   selectPrevComponent,
   selectNextComponent,
+  changeComponentTitle,
 } = questionComponentsSlice.actions;
 
 export default questionComponentsSlice.reducer;
