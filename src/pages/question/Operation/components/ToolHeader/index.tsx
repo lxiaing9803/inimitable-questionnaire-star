@@ -1,57 +1,71 @@
-import { Button, Input, Space, Typography } from 'antd';
-import styles from './index.module.scss';
-import { EditOutlined, LeftOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { Button, message, Space } from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
+import { useNavigate, useParams } from 'react-router-dom';
 import ToolBar from '../ToolBar';
 import useGetPageSetting from '@/hooks/useGetPageSetting';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch } from '@/utils/hook';
 import { changePageSettingTitle } from '@/store/questionPageSetting';
+import ToolEditTitle from '../ToolEditTitle';
+import styles from './index.module.scss';
+import useGetQuestionComponentInfo from '@/hooks/useGetQuestionComponentInfo';
+import { useKeyPress, useRequest } from 'ahooks';
+import { updateQuestion } from '@/apis/question';
 
-const { Title } = Typography;
+const ToolHeader = () => {
+  const navigate = useNavigate();
 
-const EditTitle = () => {
-  const { title } = useGetPageSetting();
+  const { id } = useParams();
+
+  const pageInfo = useGetPageSetting();
+
+  const { componentList } = useGetQuestionComponentInfo();
 
   const dispatch = useAppDispatch();
 
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { loading, run: save } = useRequest(
+    async () => {
+      if (!id) return;
+      await updateQuestion(id, { ...pageInfo, componentList });
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success('保存成功');
+      },
+    }
+  );
 
-  const handleEdit = useCallback(() => {
-    setIsEdit(true);
-  }, []);
+  const { loading: publishLoading, run: publish } = useRequest(
+    async () => {
+      if (!id) return;
+      await updateQuestion(id, { ...pageInfo, componentList, isPublished: true }).then(() => {});
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success({
+          content: '发布成功',
+          duration: 1,
+          onClose: () => {
+            navigate(`/question/stat/${id}`);
+          },
+        });
+      },
+    }
+  );
 
-  const onBlur = useCallback(() => {
-    setIsEdit(false);
-  }, []);
-
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newTitle = e.target.value.trim();
+  const handleEditTitle = useCallback(
+    (newTitle: string) => {
       dispatch(changePageSettingTitle(newTitle));
     },
     [dispatch]
   );
 
-  const renderTitle = useMemo(() => {
-    if (isEdit) {
-      return (
-        <Input autoFocus value={title} onChange={onChange} onPressEnter={onBlur} onBlur={onBlur} />
-      );
-    }
-    return <Title>{title}</Title>;
-  }, [isEdit, onBlur, onChange, title]);
-
-  return (
-    <Space>
-      {renderTitle}
-      {!isEdit && <Button type="text" icon={<EditOutlined />} onClick={handleEdit} />}
-    </Space>
-  );
-};
-
-const ToolHeader = () => {
-  const navigate = useNavigate();
+  useKeyPress(['ctrl.s', 'meta.s'], (e: KeyboardEvent) => {
+    e.preventDefault();
+    if (!loading) save();
+  });
 
   return (
     <div className={styles.headerWrapper}>
@@ -61,7 +75,7 @@ const ToolHeader = () => {
             <Button type="link" icon={<LeftOutlined />} onClick={() => navigate(-1)}>
               返回
             </Button>
-            <EditTitle />
+            <ToolEditTitle title={pageInfo.title} onEdit={handleEditTitle} />
           </Space>
         </div>
         <div className={styles.main}>
@@ -69,8 +83,12 @@ const ToolHeader = () => {
         </div>
         <div className={styles.right}>
           <Space>
-            <Button>保存</Button>
-            <Button type="primary">发布</Button>
+            <Button onClick={save} loading={loading}>
+              保存
+            </Button>
+            <Button type="primary" onClick={publish} loading={publishLoading}>
+              发布
+            </Button>
           </Space>
         </div>
       </div>

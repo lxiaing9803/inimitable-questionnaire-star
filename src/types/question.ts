@@ -24,14 +24,7 @@ export type QuestionDataType = {
   isDeleted: boolean;
 };
 
-export type QuestionRequestParams = {
-  title: string;
-  isStar: boolean;
-  isDeleted: boolean;
-  page: number;
-  pageSize: number;
-  keyword: string;
-};
+export type QuestionRequestParams = Omit<QuestionDataType, 'id' | 'createdAt'> & QuestionInfoType;
 
 // 问卷详情数据类型
 export type QuestionInfoType = {

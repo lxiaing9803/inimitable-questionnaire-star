@@ -9,7 +9,7 @@ import NotFound from '@/pages/not-found';
 import List from '@/pages/manage/list';
 import Trash from '@/pages/manage/trash';
 import Star from '@/pages/manage/star';
-import Operation from '@/pages/question/Operation';
+import Operation from '@/pages/question/operation';
 import Stat from '@/pages/question/stat';
 
 const router = createBrowserRouter([
