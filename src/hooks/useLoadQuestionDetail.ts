@@ -1,5 +1,5 @@
 import { getQuestionDetail } from '@/apis/question';
-import { resetComponentList } from '@/store/questionComponentsReducer';
+import { resetComponents } from '@/store/questionComponentsReducer';
 import { resetPageSetting } from '@/store/questionPageSetting';
 import { useAppDispatch } from '@/utils/hook';
 import { useRequest } from 'ahooks';
@@ -35,7 +35,7 @@ const useLoadQuestionDetail = () => {
     const { title, componentList, desc = '', css = '', js = '' } = data;
 
     dispatch(
-      resetComponentList({
+      resetComponents({
         componentList,
         selectedId: componentList?.[0]?.fe_id ?? '',
         copiedComponent: null,

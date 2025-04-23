@@ -9,6 +9,7 @@ import {
 } from '@/store/questionComponentsReducer';
 import { isActiveElementValid } from '@/utils';
 import { message } from 'antd';
+import { ActionCreators } from 'redux-undo';
 
 const useBindCanvasKeyPress = () => {
   const dispatch = useAppDispatch();
@@ -38,5 +39,27 @@ const useBindCanvasKeyPress = () => {
     if (!isActiveElementValid()) return;
     dispatch(selectNextComponent());
   });
+  // 撤销
+  useKeyPress(
+    ['ctrl.z', 'meta.z'],
+    () => {
+      if (!isActiveElementValid()) return;
+      dispatch(ActionCreators.undo());
+    },
+    {
+      exactMatch: true,
+    }
+  );
+  // 重做
+  useKeyPress(
+    ['ctrl.shift.z', 'meta.shift.z'],
+    () => {
+      if (!isActiveElementValid()) return;
+      dispatch(ActionCreators.redo());
+    },
+    {
+      exactMatch: true,
+    }
+  );
 };
 export default useBindCanvasKeyPress;

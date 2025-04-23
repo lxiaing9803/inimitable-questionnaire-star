@@ -17,7 +17,13 @@ export const questionComponentsSlice = createSlice({
   name: 'questionComponentsReducer',
   initialState,
   reducers: {
-    resetComponentList: (_, action: PayloadAction<QuestionComponentStateType>) => action.payload,
+    resetComponents: produce(
+      (draft: QuestionComponentStateType, action: PayloadAction<QuestionComponentStateType>) => {
+        draft.componentList = action.payload.componentList;
+        draft.selectedId = action.payload.selectedId;
+        draft.copiedComponent = action.payload.copiedComponent;
+      }
+    ),
     changeSelectedId: produce(
       (draft: QuestionComponentStateType, action: PayloadAction<string>) => {
         draft.selectedId = action.payload;
@@ -135,7 +141,7 @@ export const questionComponentsSlice = createSlice({
 });
 
 export const {
-  resetComponentList,
+  resetComponents,
   changeSelectedId,
   addComponent,
   changeComponentProps,

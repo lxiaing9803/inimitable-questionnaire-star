@@ -15,12 +15,24 @@ import {
   DownOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
+  RedoOutlined,
+  UndoOutlined,
   UpOutlined,
 } from '@ant-design/icons';
 import { Button, message, Space, Tooltip } from 'antd';
 import { useCallback, useMemo } from 'react';
+import { ActionCreators } from 'redux-undo';
 
-type ToolBarActionKeyType = 'delete' | 'hidden' | 'lock' | 'copy' | 'paste' | 'up' | 'down';
+type ToolBarActionKeyType =
+  | 'delete'
+  | 'hidden'
+  | 'lock'
+  | 'copy'
+  | 'paste'
+  | 'up'
+  | 'down'
+  | 'undo'
+  | 'redo';
 
 const ToolBar = () => {
   const dispatch = useAppDispatch();
@@ -68,6 +80,12 @@ const ToolBar = () => {
           break;
         case 'down':
           dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex + 1 }));
+          break;
+        case 'undo':
+          dispatch(ActionCreators.undo());
+          break;
+        case 'redo':
+          dispatch(ActionCreators.redo());
           break;
         default:
           break;
@@ -134,6 +152,12 @@ const ToolBar = () => {
           onClick={() => handleClick('down')}
           disabled={isLast}
         />
+      </Tooltip>
+      <Tooltip title="撤销">
+        <Button shape="circle" icon={<UndoOutlined />} onClick={() => handleClick('undo')} />
+      </Tooltip>
+      <Tooltip title="重做">
+        <Button shape="circle" icon={<RedoOutlined />} onClick={() => handleClick('redo')} />
       </Tooltip>
     </Space>
   );
