@@ -2,6 +2,7 @@ import useGetQuestionComponentInfo from '@/hooks/useGetQuestionComponentInfo';
 import {
   changeComponentHidden,
   copySelectedComponent,
+  moveComponent,
   pasteCopiedComponent,
   removeSelectedComponent,
   toggleComponentLocked,
@@ -11,18 +12,33 @@ import {
   BlockOutlined,
   CopyOutlined,
   DeleteOutlined,
+  DownOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
+  UpOutlined,
 } from '@ant-design/icons';
 import { Button, message, Space, Tooltip } from 'antd';
 import { useCallback, useMemo } from 'react';
 
-type ToolBarActionKeyType = 'delete' | 'hidden' | 'lock' | 'copy' | 'paste';
+type ToolBarActionKeyType = 'delete' | 'hidden' | 'lock' | 'copy' | 'paste' | 'up' | 'down';
 
 const ToolBar = () => {
   const dispatch = useAppDispatch();
 
-  const { selectedId, selectedComponent, copiedComponent } = useGetQuestionComponentInfo();
+  const { selectedId, selectedComponent, copiedComponent, componentList } =
+    useGetQuestionComponentInfo();
+
+  const selectedIndex = useMemo(() => {
+    return componentList.findIndex((item) => item.fe_id === selectedId);
+  }, [componentList, selectedId]);
+
+  const isFirst = useMemo(() => {
+    return selectedIndex <= 0;
+  }, [selectedIndex]);
+
+  const isLast = useMemo(() => {
+    return selectedIndex >= componentList.length - 1;
+  }, [selectedIndex, componentList]);
 
   const isLocked = useMemo(() => {
     return selectedComponent?.isLocked ?? false;
@@ -47,11 +63,17 @@ const ToolBar = () => {
         case 'paste':
           dispatch(pasteCopiedComponent());
           break;
+        case 'up':
+          dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex - 1 }));
+          break;
+        case 'down':
+          dispatch(moveComponent({ oldIndex: selectedIndex, newIndex: selectedIndex + 1 }));
+          break;
         default:
           break;
       }
     },
-    [dispatch, selectedId]
+    [dispatch, selectedId, selectedIndex]
   );
 
   return (
@@ -95,6 +117,22 @@ const ToolBar = () => {
           icon={<BlockOutlined />}
           onClick={() => handleClick('paste')}
           disabled={!copiedComponent}
+        />
+      </Tooltip>
+      <Tooltip title="上移">
+        <Button
+          shape="circle"
+          icon={<UpOutlined />}
+          onClick={() => handleClick('up')}
+          disabled={isFirst}
+        />
+      </Tooltip>
+      <Tooltip title="下移">
+        <Button
+          shape="circle"
+          icon={<DownOutlined />}
+          onClick={() => handleClick('down')}
+          disabled={isLast}
         />
       </Tooltip>
     </Space>

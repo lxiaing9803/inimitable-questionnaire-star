@@ -33,3 +33,7 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
+/* dnd-kit 拖拽排序 */
+div[role='button'] {
+  outline: 0;
+}

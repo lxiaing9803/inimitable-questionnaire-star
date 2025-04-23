@@ -52,5 +52,5 @@ export const insertNewComponent = (
 export const isActiveElementValid = () => {
   const activeElement = document.activeElement;
   // 如果在body上，则认为没有焦点元素
-  return activeElement === document.body;
+  return activeElement === document.body || activeElement?.matches('div[role="button"]');
 };

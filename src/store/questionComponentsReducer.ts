@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash';
 import { produce } from 'immer';
 import { getNextSelectedId, insertNewComponent } from '@/utils';
 import { nanoid } from 'nanoid';
+import { arrayMove } from '@dnd-kit/sortable';
 
 const initialState: QuestionComponentStateType = {
   componentList: [],
@@ -119,6 +120,17 @@ export const questionComponentsSlice = createSlice({
         }
       }
     ),
+    // 拖拽排序组件
+    moveComponent: produce(
+      (
+        draft: QuestionComponentStateType,
+        action: PayloadAction<{ oldIndex: number; newIndex: number }>
+      ) => {
+        const { oldIndex, newIndex } = action.payload;
+        const { componentList } = draft;
+        draft.componentList = arrayMove(componentList, oldIndex, newIndex);
+      }
+    ),
   },
 });
 
@@ -135,6 +147,7 @@ export const {
   selectPrevComponent,
   selectNextComponent,
   changeComponentTitle,
+  moveComponent,
 } = questionComponentsSlice.actions;
 
 export default questionComponentsSlice.reducer;
