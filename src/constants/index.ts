@@ -16,7 +16,7 @@ export const PAGE_TITLE_MAP = {
   '/manage/list': '问卷系统-我的问卷',
   '/manage/star': '问卷系统-星标问卷',
   '/manage/trash': '问卷系统-回收站',
-  '/question/operation': '问卷系统-编辑问卷',
+  '/question/operation': '问卷系统-问卷详情',
   '/question/stat': '问卷系统-问卷统计',
 };
 
@@ -27,3 +27,12 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 /** token */
 export const TOKEN_KEY = 'QUESTION_USER_TOKEN';
+/** 统计颜色 */
+export const STAT_COLORS: string[] = [
+  '#FF2D2D',
+  '#BE77FF',
+  '#2894FF',
+  '#00EC00',
+  '#EAC100',
+  '#FF9D6F',
+];

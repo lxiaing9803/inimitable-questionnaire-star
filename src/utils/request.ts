@@ -20,9 +20,13 @@ const instance: AxiosInstance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    if (config.url === '/api/user/login') {
+      return config;
+    }
     const token = getToken();
     if (!token) {
       message.error('请先登录');
+      return Promise.reject('请先登录');
     }
     config.headers.Authorization = `Bearer ${token}`;
     return config;

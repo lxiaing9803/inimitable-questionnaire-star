@@ -1,4 +1,4 @@
-import useGetPageSetting from '@/hooks/useGetPageSetting';
+import useGetQuestionPageSetting from '@/hooks/useGetQuestionPageSetting';
 import { resetPageSetting } from '@/store/questionPageSetting';
 import { useAppDispatch } from '@/utils/hook';
 import { Form, Input } from 'antd';
@@ -7,7 +7,7 @@ import { useCallback, useEffect } from 'react';
 const { TextArea } = Input;
 
 const PageSetting = () => {
-  const pageSettingInfo = useGetPageSetting();
+  const pageSettingInfo = useGetQuestionPageSetting();
 
   const [form] = Form.useForm();
 

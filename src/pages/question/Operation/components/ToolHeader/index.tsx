@@ -2,7 +2,7 @@ import { Button, message, Space } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import ToolBar from '../ToolBar';
-import useGetPageSetting from '@/hooks/useGetPageSetting';
+import useGetQuestionPageSetting from '@/hooks/useGetQuestionPageSetting';
 import { useCallback } from 'react';
 import { useAppDispatch } from '@/utils/hook';
 import { changePageSettingTitle } from '@/store/questionPageSetting';
@@ -17,7 +17,7 @@ const ToolHeader = () => {
 
   const { id } = useParams();
 
-  const pageInfo = useGetPageSetting();
+  const pageInfo = useGetQuestionPageSetting();
 
   const { componentList } = useGetQuestionComponentInfo();
 

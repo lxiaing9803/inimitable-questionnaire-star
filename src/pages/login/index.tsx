@@ -8,6 +8,8 @@ import { usernameRegex, regexErrorMap } from '@/constants/rules';
 import styles from './index.module.scss';
 import { login } from '@/apis/user';
 import { setToken } from '@/utils/user';
+import { useAppDispatch } from '@/utils/hook';
+import { loginReducer } from '@/store/userReducer';
 
 const { Title } = Typography;
 
@@ -18,6 +20,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   const rememberUser = useCallback((userInfo: LoginFormDataType) => {
     localStorage.setItem(QUESTIONNAIRE_USER_INFO, JSON.stringify(userInfo));
   }, []);
@@ -26,7 +30,7 @@ const Login = () => {
     localStorage.removeItem(QUESTIONNAIRE_USER_INFO);
   }, []);
 
-  const getUserInfo = useCallback(() => {
+  const getUserInfoByStorage = useCallback(() => {
     const data = localStorage.getItem(QUESTIONNAIRE_USER_INFO);
     if (!data) return;
     const userInfo = JSON.parse(data) as LoginFormDataType;
@@ -52,17 +56,18 @@ const Login = () => {
           content: '登录成功',
           duration: 1,
           onClose: () => {
+            dispatch(loginReducer({ token }));
             navigate(MANAGE_INDEX_PATHNAME);
           },
         });
       }
     },
-    [clearUserInfo, navigate, rememberUser]
+    [clearUserInfo, dispatch, navigate, rememberUser]
   );
 
   useEffect(() => {
-    getUserInfo();
-  }, [getUserInfo]);
+    getUserInfoByStorage();
+  }, [getUserInfoByStorage]);
 
   return (
     <div className={styles.login}>

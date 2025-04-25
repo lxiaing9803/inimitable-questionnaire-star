@@ -3,8 +3,14 @@ import QuestionTitleConfig, { QuestionTitlePropsType } from './QuestionTitle';
 import QuestionParagraphConfig, { QuestionParagraphPropsType } from './QuestionParagraph';
 import QuestionInfoConfig, { QuestionInfoPropsType } from './QuestionInfo';
 import QuestionTextareaConfig, { QuestionTextareaPropsType } from './QuestionTextarea';
-import QuestionRadioConfig, { QuestionRadioPropsType } from './QuestionRadio';
-import QuestionCheckboxConfig, { QuestionCheckboxPropsType } from './QuestionCheckbox';
+import QuestionRadioConfig, {
+  QuestionRadioPropsType,
+  QuestionRadioStateDataType,
+} from './QuestionRadio';
+import QuestionCheckboxConfig, {
+  QuestionCheckboxPropsType,
+  QuestionCheckboxStateDataType,
+} from './QuestionCheckbox';
 
 export type QuestionComponentType =
   | 'questionTitle'
@@ -23,6 +29,9 @@ export type QuestionComponentPropsType = QuestionInputPropsType &
   QuestionTextareaPropsType &
   QuestionRadioPropsType &
   QuestionCheckboxPropsType;
+
+export type QuestionComponentStateType = QuestionRadioStateDataType & QuestionCheckboxStateDataType;
+
 // 组件配置类型
 export type QuestionComponentConfigType = {
   title: string;
@@ -30,6 +39,7 @@ export type QuestionComponentConfigType = {
   Component: React.FC<QuestionComponentPropsType>;
   PropComponent: React.FC<QuestionComponentPropsType>;
   defaultProps: QuestionComponentPropsType;
+  StatComponent?: React.FC<QuestionComponentStateType>;
 };
 
 const componentConfigList: QuestionComponentConfigType[] = [

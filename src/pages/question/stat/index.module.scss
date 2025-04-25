@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  .contentWrapper {
+    flex: auto;
+    padding: 12px 0;
+    .content {
+      margin: 0 24px;
+      display: flex;
+      .left {
+        width: 350px;
+      }
+      .main {
+        flex: 1;
+        margin: 0 24px;
+        padding: 12px 18px;
+        background-color: #fff;
+      }
+      .right {
+        width: 400px;
+        background-color: #fff;
+        padding: 12px 18px;
+        overflow: hidden;
+      }
+    }
+  }
+}

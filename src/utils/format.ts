@@ -11,3 +11,7 @@ export const validatorFormItem = (validatorKey: ValidatorFormItemKeyType, value:
   }
   return Promise.reject(new Error(regexErrorMap[validatorKey]));
 };
+
+export const formatStatCount = (count: number) => {
+  return (count * 100).toFixed(2);
+};

@@ -9,7 +9,7 @@ import { getToken } from '@/utils/user';
 const useLoadUserData = () => {
   const [isWaitingUserInfo, setIsWaitingUserInfo] = useState<boolean>(true);
 
-  const { username } = useGetUserInfo();
+  const { username, token } = useGetUserInfo();
 
   const dispatch = useAppDispatch();
 
@@ -28,14 +28,14 @@ const useLoadUserData = () => {
     if (username) {
       setIsWaitingUserInfo(false);
     } else {
-      const token = getToken();
-      if (token) {
+      const currentToken = token || getToken();
+      if (currentToken) {
         run();
       } else {
         setIsWaitingUserInfo(false);
       }
     }
-  }, [run, username]);
+  }, [run, token, username]);
 
   return {
     isWaitingUserInfo,

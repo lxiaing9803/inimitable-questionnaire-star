@@ -24,6 +24,14 @@ export type QuestionDataType = {
   isDeleted: boolean;
 };
 
+export type QuestionDataRequestParams = {
+  title: string;
+  isStar: boolean;
+  isPublished: boolean;
+  page: number;
+  pageSize: number;
+};
+
 export type QuestionRequestParams = Omit<QuestionDataType, 'id' | 'createdAt'> & QuestionInfoType;
 
 // 问卷详情数据类型
@@ -34,6 +42,7 @@ export type QuestionInfoType = {
   desc?: string;
   js?: string;
   css?: string;
+  isPublished?: boolean;
 };
 // store中questionComponentsReducer的state类型
 export type QuestionComponentStateType = {
@@ -59,4 +68,5 @@ export type QuestionPageSettingType = {
   desc?: string;
   js?: string;
   css?: string;
+  isPublished?: boolean;
 };

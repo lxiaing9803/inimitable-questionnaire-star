@@ -32,7 +32,7 @@ const useLoadQuestionDetail = () => {
   // 根据获取的data设置questionComponentsReducer
   useEffect(() => {
     if (!data) return;
-    const { title, componentList, desc = '', css = '', js = '' } = data;
+    const { title, componentList, desc = '', css = '', js = '', isPublished } = data;
 
     dispatch(
       resetComponents({
@@ -42,12 +42,13 @@ const useLoadQuestionDetail = () => {
       })
     );
 
-    dispatch(resetPageSetting({ title, desc, css, js }));
+    dispatch(resetPageSetting({ title, desc, css, js, isPublished }));
   }, [data, dispatch]);
 
   return {
     loading,
     error,
+    data,
   };
 };
 

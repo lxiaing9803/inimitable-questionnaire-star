@@ -12,3 +12,7 @@ export type QuestionRadioPropsType = {
   disabled?: boolean;
   onChange?: (value: QuestionRadioPropsType) => void;
 };
+
+export type QuestionRadioStateDataType = {
+  stat: Array<{ name: string; count: number }>;
+};

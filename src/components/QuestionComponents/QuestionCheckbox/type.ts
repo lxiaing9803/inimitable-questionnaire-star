@@ -11,3 +11,7 @@ export type QuestionCheckboxPropsType = {
   disabled?: boolean;
   onChange?: (newProps: QuestionCheckboxPropsType) => void;
 };
+
+export type QuestionCheckboxStateDataType = {
+  stat: Array<{ name: string; count: number }>;
+};
