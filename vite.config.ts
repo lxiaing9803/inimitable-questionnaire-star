@@ -1,10 +1,72 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import vitePluginImp from 'vite-plugin-imp';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    visualizer({
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      emitFile: false,
+    }),
+    vitePluginImp({
+      libList: [
+        {
+          libName: 'antd',
+          style: (name) => `antd/es/${name}/style`,
+        },
+      ],
+    }),
+  ],
+  build: {
+    target: 'esnext',
+    minify: 'terser',
+    cssCodeSplit: true,
+    sourcemap: true,
+    assetsDir: 'static/assets',
+    outDir: 'dist',
+    assetsInlineLimit: 4096,
+    chunkSizeWarningLimit: 1000,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        pure_funcs: ['console.log'],
+      },
+      format: {
+        comments: false,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            if (id.includes('lodash')) {
+              return 'vendor-lodash';
+            }
+            if (id.includes('axios')) {
+              return 'vendor-axios';
+            }
+            if (id.includes('antd')) {
+              return 'vendor-antd';
+            }
+            return 'vendor';
+          }
+        },
+        assetFileNames: 'static/assets/[name]-[hash][extname]',
+        chunkFileNames: 'static/js/[name]-[hash].js',
+        entryFileNames: 'static/js/[name]-[hash].js',
+      },
+    },
+  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -30,5 +92,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', 'dayjs'],
+    exclude: ['moment'],
   },
 });

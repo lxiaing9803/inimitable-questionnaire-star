@@ -28,6 +28,7 @@ export type QuestionDataRequestParams = {
   title: string;
   isStar: boolean;
   isPublished: boolean;
+  isDeleted: boolean;
   page: number;
   pageSize: number;
 };
