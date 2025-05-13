@@ -14,7 +14,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { renderPublishStatus, renderPublishTagColor } from '@/utils/manage';
 import { useRequest } from 'ahooks';
-import { duplicateQuestion, updateQuestion } from '@/apis/question';
+import { deleteQuestion, duplicateQuestion, updateQuestion } from '@/apis/question';
 
 type QuestionCardProps = {
   info: QuestionDataType;
@@ -23,16 +23,20 @@ type QuestionCardProps = {
 type NavigateType = 'operation' | 'stat';
 
 const QuestionCard: React.FC<QuestionCardProps> = ({ info }) => {
-  const { id, title, createdAt, answerCount, isPublished, isStar, isDeleted } = info;
+  const { id, title, createdAt, answerCount, isPublished, isStar, isDeleted, _id } = info;
 
   const navigate = useNavigate();
+
+  const currentId = useMemo(() => {
+    return id || _id;
+  }, [id, _id]);
 
   const [isStarState, setIsStartState] = useState<boolean>(isStar);
   const [isDeletedState, setIsDeletedState] = useState<boolean>(isDeleted);
 
   const { run: changeStar, loading: changeStarLoading } = useRequest(
     async () => {
-      await updateQuestion(id, { isStar: isStarState });
+      await updateQuestion(currentId, { isStar: !isStarState });
     },
     {
       manual: true,
@@ -45,20 +49,20 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ info }) => {
 
   const { run: duplicateRun, loading: duplicateLoading } = useRequest(
     async () => {
-      const res = await duplicateQuestion(id);
+      const res = await duplicateQuestion(currentId);
       return res;
     },
     {
       manual: true,
       onSuccess: (res) => {
         message.success('复制成功');
-        navigate(`/question/operation/${res.id}`);
+        navigate(`/question/operation/${res.id || res._id}`);
       },
     }
   );
 
   const { run: deleteRun, loading: deleteLoading } = useRequest(
-    async () => await updateQuestion(id, { isDeleted: !isDeletedState }),
+    async () => await deleteQuestion(currentId),
     {
       manual: true,
       onSuccess: () => {
@@ -73,14 +77,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ info }) => {
   }, [isStarState]);
 
   const currentLinkTo = useMemo(() => {
-    return isPublished ? `/question/stat/${id}` : `/question/operation/${id}`;
-  }, [id, isPublished]);
+    return isPublished ? `/question/stat/${currentId}` : `/question/operation/${currentId}`;
+  }, [currentId, isPublished]);
 
   const handleNavigate = useCallback(
     (key: NavigateType) => {
-      navigate(`/question/${key}/${id}`);
+      navigate(`/question/${key}/${currentId}`);
     },
-    [id, navigate]
+    [currentId, navigate]
   );
 
   const handleDelete = useCallback(() => {

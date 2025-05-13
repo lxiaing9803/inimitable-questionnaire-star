@@ -22,6 +22,7 @@ export type QuestionDataType = {
   answerCount: number;
   createdAt: string;
   isDeleted: boolean;
+  _id: string;
 };
 
 export type QuestionDataRequestParams = {

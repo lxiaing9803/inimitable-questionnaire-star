@@ -24,7 +24,7 @@ const ManageLayout = () => {
       if (key === 'create') {
         setLoading(true);
         const res = await createQuestion();
-        const { id } = res;
+        const id = res?.id || res?._id;
         if (id) {
           setLoading(false);
           navigate(`/question/operation/${id}`);

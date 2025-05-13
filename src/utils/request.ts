@@ -41,7 +41,7 @@ instance.interceptors.response.use(
   <T>(response: AxiosResponse<ApiResponseDataType<T>>) => {
     const res = response.data;
     const { code, msg, data } = res;
-    if (code !== 0) {
+    if (code !== 200 && code !== 201) {
       message.error(msg);
       return Promise.reject(msg || 'Error');
     }

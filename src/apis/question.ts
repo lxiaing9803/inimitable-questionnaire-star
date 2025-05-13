@@ -11,7 +11,7 @@ export async function getQuestionDetail(id: string) {
 }
 
 export async function createQuestion() {
-  return await request.post<{ id: string }>('/api/question');
+  return await request.post<any>('/api/question');
 }
 
 export async function getQuestionList(params?: Partial<QuestionDataRequestParams>) {
@@ -21,11 +21,15 @@ export async function getQuestionList(params?: Partial<QuestionDataRequestParams
 }
 
 export async function updateQuestion(id: string, data: Partial<QuestionRequestParams>) {
-  return await request.put<any>(`/api/question/update/${id}`, data);
+  return await request.patch<any>(`/api/question/update/${id}`, data);
 }
 
 export async function duplicateQuestion(id: string) {
-  return await request.post<{ id: string }>(`/api/question/duplicate/${id}`);
+  return await request.post<any>(`/api/question/duplicate/${id}`);
+}
+
+export async function deleteQuestion(id: string) {
+  return await request.delete<any>(`/api/question/delete/${id}`);
 }
 
 export async function deleteQuestions(ids: string[]) {

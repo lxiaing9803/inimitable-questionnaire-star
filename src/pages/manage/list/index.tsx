@@ -1,22 +1,20 @@
-import { Empty, Spin, Typography } from 'antd';
+import { List, Typography, Skeleton, Divider } from 'antd';
 import QuestionCard from '@/components/QuestionCard';
 import { QuestionDataType } from '@/types/question';
 import SearchInput from '@/components/SearchInput';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getQuestionList } from '@/apis/question';
 import styles from '../manage.module.scss';
-import { useDebounceFn, useRequest } from 'ahooks';
+import { useRequest } from 'ahooks';
 import { DEFAULT_PAGE_SIZE } from '@/constants';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Title } = Typography;
 
-const List = () => {
+const ListPage = () => {
   const [list, setList] = useState<QuestionDataType[]>([]);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const [isStart, setIsStart] = useState<boolean>(false);
-
-  const moreRef = useRef<HTMLDivElement>(null);
 
   const { run, loading } = useRequest(
     async () => {
@@ -27,47 +25,21 @@ const List = () => {
       manual: true,
       onSuccess: (res) => {
         const { total: t, list: l } = res;
-        setList(list.concat(l));
+        const newItems = l.filter((newItem) => !list.some((item) => item._id === newItem._id));
+        setList(list.concat(newItems));
         setTotal(t);
         setPage(page + 1);
       },
     }
   );
 
-  const { run: loadMore } = useDebounceFn(
-    () => {
-      const ele = moreRef.current;
-      if (!ele) return;
-      const { bottom } = ele.getBoundingClientRect();
-      if (bottom < document.body.clientHeight) {
-        run();
-        setIsStart(true);
-      }
-    },
-    { wait: 1000 }
-  );
-
-  const hasMoreData = useMemo(() => {
-    return total > list.length;
-  }, [list.length, total]);
-
-  const loadMoreContentElement = useMemo(() => {
-    if (!isStart || loading) return <Spin />;
-    if (total === 0) return <Empty />;
-    if (!hasMoreData) return <span>没有更多数据了</span>;
-    return <span>加载更多</span>;
-  }, [hasMoreData, isStart, loading, total]);
-
   useEffect(() => {
     run();
   }, [run]);
 
   useEffect(() => {
-    if (hasMoreData) {
-      window.addEventListener('scroll', loadMore);
-    }
-    return () => window.removeEventListener('scroll', loadMore);
-  }, [hasMoreData, loadMore]);
+    console.log(list, total);
+  }, [list, total]);
 
   return (
     <>
@@ -80,15 +52,23 @@ const List = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {list?.map((item) => {
-          return <QuestionCard key={item.id} info={item} />;
-        })}
-      </div>
-      <div className={styles.footer}>
-        <div ref={moreRef}>{loadMoreContentElement}</div>
+        <InfiniteScroll
+          dataLength={total}
+          next={run}
+          hasMore={list.length < total}
+          loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+          scrollableTarget="scrollableDiv"
+        >
+          <List
+            dataSource={list}
+            loading={loading}
+            renderItem={(item: QuestionDataType) => <QuestionCard key={item._id} info={item} />}
+          />
+        </InfiniteScroll>
       </div>
     </>
   );
 };
 
-export default List;
+export default ListPage;
